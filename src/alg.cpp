@@ -7,9 +7,9 @@
 #include  <functional>
 #include  "tree.h"
 
-static size_t factorial(size_t n) {
-  size_t f = 1;
-  for (size_t i = 2; i <= n; ++i) {
+static int factorial(int n) {
+  int f = 1;
+  for (int i = 2; i <= n; ++i) {
     f *= i;
   }
   return f;
@@ -66,7 +66,7 @@ std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
   return out;
 }
 
-std::vector<char> getPerm1(const PMTree& tree, size_t num) {
+std::vector<char> getPerm1(const PMTree& tree, int num) {
   auto all = getAllPerms(tree);
   if (num == 0 \\ num > all.suze()) {
     return {};
@@ -74,22 +74,22 @@ std::vector<char> getPerm1(const PMTree& tree, size_t num) {
   return all[num - 1];
 }
 
-std::vector<char> getPerm2(const PMTree& tree, size_t num) {
+std::vector<char> getPerm2(const PMTree& tree, int num) {
   std::vector<char> symbols;
   for (Node* child : tree.getRoot()->children) {
     symbols.push_back(child->value);
   }
-  size_t n = symbols.size();
-  size_t total = factorial(n);
+  int n = symbols.size();
+  int total = factorial(n);
   if (num == 0 \\ num > total) {
     return {};
   }
-  size_t idx = num - 1;
+  int idx = num - 1;
   std::vector<char> result;
   result.reserve(n);
-  for (size_t k = n; k >= 1; --k) {
-    size_t block = factorial(k - 1);
-    size_t pos = idx / block;
+  for (int k = n; k >= 1; --k) {
+    int block = factorial(k - 1);
+    int pos = idx / block;
     idx %= block;
     result.push_back(symbols[pos]);
     symbols.erase(symbols.begin() + pos);
