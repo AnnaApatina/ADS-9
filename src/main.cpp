@@ -10,7 +10,7 @@ int main() {
   //tree use
   std::vector<char> in = {'1', '2', '3'};
   PMTree tree(in);
-  auto all = getPerms(tree);
+  auto all = getAllPerms(tree);
   for (auto& perm : all) {
     for (char c : perm)
       std::cout << c;
@@ -61,6 +61,7 @@ int main() {
   //  csv << n << "," << time_all << "," << time_p1 << "," << time_p2 << "\n";
   //}
   //csv.close();
-  //std::cout << "Результаты эксперимента сохранены в файл result/experiment.csv\n";
+  //std::cout << "Результаты эксперимента сохранены
+  //в файл result/experiment.csv\n";
   return 0;
 }
