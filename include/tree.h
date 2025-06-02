@@ -18,7 +18,7 @@ class PMTree {
 
  private:
   Node* root;
-  Node* buildSubtree(Node* node, std::vector<char> remaining);
+  void buildSubtree(Node* node, std::vector<char> remaining);
   void deleteSubtree(Node* node);
 };
 std::vector<std::vector<char>> getAllPerms(PMTree& tree);
