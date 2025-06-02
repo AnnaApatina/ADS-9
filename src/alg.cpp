@@ -57,7 +57,7 @@ void permutations(Node* node, std::vector<char>& path,
   path.pop_back();
 }
 
-std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
+std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
   std::vector<std::vector<char>> out;
   std::vector<char> path;
   if (tree.getRoot()) {
