@@ -26,6 +26,7 @@ PMTree::~PMTree() {
 
 void PMTree::buildSubtree(Node* node, std::vector<char> remaining) {
   if (remaining.empty()) return;
+  std::sort(remaining.begin(), remaining.end());
   for (size_t i = 0; i < remaining.size(); ++i) {
     char c = remaining[i];
     Node* child = new Node(c);
@@ -68,31 +69,57 @@ std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
 
 std::vector<char> getPerm1(PMTree& tree, int num) {
   auto all = getAllPerms(tree);
-  if (num == 0 || num > all.size()) {
+  if (num <= 0 || num > static_cast<int>(all.size())) {
     return {};
   }
   return all[num - 1];
 }
 
-std::vector<char> getPerm2(PMTree& tree, int num) {
-  std::vector<char> symbols;
-  for (Node* child : tree.getRoot()->children) {
-    symbols.push_back(child->value);
+int countPerm(Node* node) {
+  if (node->children.empty()) {
+    return 1;
   }
-  int n = symbols.size();
-  int total = factorial(n);
-  if (num == 0 || num > total) {
+  int total = 0;
+  for (Node* child : node->children) {
+    total += countPerm(child);
+  }
+  return total;
+}
+
+bool navPerm(Node* node, int& targIdx, int& currIdx,
+             std::vector<char>& path) {
+  if (node->children.empty()) {
+    if (currIdx == targIdx) {
+      return true;
+    } else {
+      ++currIdx;
+      path.pop_back();
+      return false;
+    }
+  }
+  for (Node* child : none->children) {
+    int subCount = countPerm(child);
+    if (targIdx <= subCount + currIdx - 1) {
+      if (navPerm(child, targIdx, currIdx, path)) {
+        return true;
+      }
+    } else {
+      currIdx += subCount;
+      continue;
+    }
+  }
+  path.pop_back();
+  return false;
+}
+
+std::vector<char> getPerm2(PMTree& tree, int num) {
+  std::vector<char> result;
+  if (!tree.getRoot() || num <= 0) {
     return {};
   }
-  int idx = num - 1;
-  std::vector<char> result;
-  result.reserve(n);
-  for (int k = n; k >= 1; --k) {
-    int block = factorial(k - 1);
-    int pos = idx / block;
-    idx %= block;
-    result.push_back(symbols[pos]);
-    symbols.erase(symbols.begin() + pos);
+  int idx = 1;
+  if (navPerm(tree.getRoot(), num, idx, result)) {
+    return result;
   }
-  return result;
+  return {};
 }
