@@ -97,7 +97,7 @@ bool navPerm(Node* node, int& targIdx, int& currIdx,
       return false;
     }
   }
-  for (Node* child : none->children) {
+  for (Node* child : node->children) {
     int subCount = countPerm(child);
     if (targIdx <= subCount + currIdx - 1) {
       if (navPerm(child, targIdx, currIdx, path)) {
