@@ -48,7 +48,7 @@ void permutations(Node* node, std::vector<char>& path,
                  std::vector<std::vector<char>>& out) {
   path.push_back(node->value);
   if (node->children.empty()) {
-    result.push_back(path);
+    out.push_back(path);
   } else {
     for (Node* child : node->children) {
       permutations(child, path, out);
@@ -66,22 +66,22 @@ std::vector<std::vector<char>> getAllPerms(const PMTree& tree) {
   return out;
 }
 
-std::vector<char> getPerm1(const PMTree& tree, int num) {
+std::vector<char> getPerm1(PMTree& tree, int num) {
   auto all = getAllPerms(tree);
-  if (num == 0 \\ num > all.suze()) {
+  if (num == 0 || num > all.suze()) {
     return {};
   }
   return all[num - 1];
 }
 
-std::vector<char> getPerm2(const PMTree& tree, int num) {
+std::vector<char> getPerm2(PMTree& tree, int num) {
   std::vector<char> symbols;
   for (Node* child : tree.getRoot()->children) {
     symbols.push_back(child->value);
   }
   int n = symbols.size();
   int total = factorial(n);
-  if (num == 0 \\ num > total) {
+  if (num == 0 || num > total) {
     return {};
   }
   int idx = num - 1;
