@@ -119,15 +119,15 @@ bool navPerm(Node* node, int& targIdx, int& currIdx,
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
   std::vector<char> result;
-  if (!tree.getRoot() || num <= 0) {
+  if (!tree.getRoot() || num <= 0 || tree.getRoot()->children.empty()) {
     return {};
   }
   int idx = 1;
   for (Node* child : tree.getRoot()->children) {
-    if (navPerm(child, num, idx, result)) {
-      result.insert(result.begin(), child->value);
-      break;
+    if (navPerm(child, num, idx, path)) {
+      path.insert(path.begin(), child->value);
+      return path;
     }
   }
-  return result;
+  return {};
 }
