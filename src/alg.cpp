@@ -110,7 +110,6 @@ bool navPerm(Node* node, int& targIdx, int& currIdx,
       }
     } else {
       currIdx += subCount;
-      continue;
     }
   }
   path.pop_back();
@@ -118,7 +117,7 @@ bool navPerm(Node* node, int& targIdx, int& currIdx,
 }
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
-  std::vector<char> result;
+  std::vector<char> path;
   if (!tree.getRoot() || num <= 0 || tree.getRoot()->children.empty()) {
     return {};
   }
