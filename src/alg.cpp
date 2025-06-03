@@ -62,7 +62,10 @@ std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
   std::vector<std::vector<char>> out;
   std::vector<char> path;
   if (tree.getRoot()) {
-    permutations(tree.getRoot(), path, out);
+    for (Node* child : tree.getRoot()->children){
+      path.clear();
+      permutations(child, path, out);
+    }
   }
   return out;
 }
@@ -88,6 +91,7 @@ int countPerm(Node* node) {
 
 bool navPerm(Node* node, int& targIdx, int& currIdx,
              std::vector<char>& path) {
+  path.push_back(node->value);
   if (node->children.empty()) {
     if (currIdx == targIdx) {
       return true;
@@ -118,8 +122,11 @@ std::vector<char> getPerm2(PMTree& tree, int num) {
     return {};
   }
   int idx = 1;
-  if (navPerm(tree.getRoot(), num, idx, result)) {
-    return result;
+  for (Node* child : tree.getRoot()->children) {
+    if (navPerm(child, num, idx, result)) {
+      result.insert(result.begin(), child->value);
+      break;
+    }
   }
-  return {};
+  return result;
 }
