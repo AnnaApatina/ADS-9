@@ -79,7 +79,7 @@ std::vector<char> getPerm1(PMTree& tree, int num) {
 }
 
 int countPerm(Node* node) {
-  if (node->children.empty()) {
+  if (!node || node->children.empty()) {
     return 1;
   }
   int total = 0;
@@ -123,9 +123,15 @@ std::vector<char> getPerm2(PMTree& tree, int num) {
   int idx = 1;
   for (Node* child : tree.getRoot()->children) {
     std::vector<char> path;
-    if (navPerm(child, num, idx, path)) {
-      path.insert(path.begin(), child->value);
-      return path;
+    int subCount = countPerm(child);
+    if (num <= subCount) {
+      if (navPerm(child, num, idx, path)) {
+        path.insert(path.begin(), child->value);
+        return path;
+      }
+      break;
+    } else {
+      idx += subCount;
     }
   }
   return {};
