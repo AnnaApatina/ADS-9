@@ -9,6 +9,10 @@ struct Node {
   char value;
   std::vector<Node*> children;
   explicit Node(char v) : value(v) {}
+  ~Node() {
+    for (auto child : children)
+      delete child;
+  }
 };
 class PMTree {
  public:
