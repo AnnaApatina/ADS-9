@@ -21,7 +21,7 @@ PMTree::PMTree(const std::vector<char>& symbols) {
 }
 
 PMTree::~PMTree() {
-  deleteSubtree(root);
+  delete root;
 }
 
 void PMTree::buildSubtree(Node* node, std::vector<char> remaining) {
@@ -61,11 +61,11 @@ void permutations(Node* node, std::vector<char>& path,
 std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
   std::vector<std::vector<char>> out;
   std::vector<char> path;
-  if (tree.getRoot()) {
-    for (Node* child : tree.getRoot()->children) {
-      path.clear();
-      permutations(child, path, out);
-    }
+  Node* root = tree.getRoot();
+  if (!root) return out;
+  for (Node* child : root->children) {
+    path.clear();
+    permutations(child, path, out);
   }
   return out;
 }
@@ -78,61 +78,25 @@ std::vector<char> getPerm1(PMTree& tree, int num) {
   return all[num - 1];
 }
 
-int countPerm(Node* node) {
-  if (!node || node->children.empty()) {
-    return 1;
-  }
-  int total = 0;
-  for (Node* child : node->children) {
-    total += countPerm(child);
-  }
-  return total;
-}
-
-bool navPerm(Node* node, int& targIdx, int& currIdx,
-             std::vector<char>& path) {
-  if (!node) return false;
-  path.push_back(node->value);
-  if (node->children.empty()) {
-    if (currIdx == targIdx) {
-      return true;
-    } else {
-      ++currIdx;
-      path.pop_back();
-      return false;
-    }
-  }
-  for (Node* child : node->children) {
-    int subCount = countPerm(child);
-    if (targIdx <= subCount + currIdx - 1) {
-      if (navPerm(child, targIdx, currIdx, path)) {
-        return true;
-      }
-    } else {
-      currIdx += subCount;
-    }
-  }
-  path.pop_back();
-  return false;
-}
-
 std::vector<char> getPerm2(PMTree& tree, int num) {
-  if (!tree.getRoot() || num <= 0 || tree.getRoot()->children.empty()) {
-    return {};
+  Node* root = tree.getRoot();
+  if (!root) return {};
+  std::vector<char> symbols;
+  for (Node* child : root->children) {
+    symbols.push_back(child->value);
   }
-  int idx = 1;
-  for (Node* child : tree.getRoot()->children) {
-    std::vector<char> path;
-    int subCount = countPerm(child);
-    if (num <= subCount) {
-      if (navPerm(child, num, idx, path)) {
-        path.insert(path.begin(), child->value);
-        return path;
-      }
-      break;
-    } else {
-      idx += subCount;
-    }
+  int n = static_cast<int>(symbols.size());
+  int total = factorial(n);
+  if (num <= 0 || num > total) return {};
+  int idx = num - 1;
+  std::vector<char> result;
+  result.reserve(n);
+  for (int k = n; k >= 1; --k) {
+    int blockSize = factorial(k - 1);
+    int pos = idx / blockSize;
+    idx %= blockSize;
+    result.push_back(symbols[pos]);
+    symbols.erase(symbols.begin() + pos);
   }
-  return {};
+  return result;
 }
